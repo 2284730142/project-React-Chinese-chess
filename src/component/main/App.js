@@ -24,7 +24,7 @@ class App extends Component {
     // 走位交换
     changePosition = (item) => {
         //调用走位判断机制
-        if (Zoufa.methodRun(this.state.selectItem, item) === 1) {
+        if (Zoufa.methodRun(this.state.selectItem, item, this.state.qi) === 1) {
 
             // 交换position
             for (let i in qi) {
