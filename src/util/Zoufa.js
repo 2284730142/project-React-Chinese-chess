@@ -29,15 +29,57 @@ export default class Zoufa {
                 } else {
                     return 0;
                 }
-            case 5:// 象，斜着走，横跨“田”位子，中间路障判断
-                if (1) {
-                    return 1;
+            case 5:// 象，斜着走，横跨“田”位子，越界判断，中间路障判断,
+                const hDisplacementX = Math.abs(selectedItem[1].position.left - nowItem.position.left);
+                const vDisplacementX = Math.abs(selectedItem[1].position.top - nowItem.position.top);
+                if ((hDisplacementX - vDisplacementX) === 0) {
+                    if (hDisplacementX === 2 && vDisplacementX === 2) {
+                        if (0 <= selectedItem[1].position.top && selectedItem[1].position.top <= 4) {
+                            if (0 <= nowItem.position.top && nowItem.position.top <= 4) {
+                                return xiangMod();
+                            } else {
+                                return 0;
+                            }
+                        } else if (5 <= selectedItem[1].position.top && selectedItem[1].position.top <= 9) {
+                            if (5 <= nowItem.position.top && nowItem.position.top <= 9) {
+                                return xiangMod();
+                            } else {
+                                return 0;
+                            }
+                        } else {
+                            return 0;
+                        }
+                    } else {
+                        return 0;
+                    }
                 } else {
                     return 0;
                 }
+
+
             case 6:// 仕，只能斜着走，只能走一格
-                if (1) {
-                    return 1;
+                const hDisplacementSh = Math.abs(selectedItem[1].position.left - nowItem.position.left);
+                const vDisplacementSh = Math.abs(selectedItem[1].position.top - nowItem.position.top);
+                if ((hDisplacementSh - vDisplacementSh) === 0) {
+                    if (hDisplacementSh === 1 && vDisplacementSh === 1) {
+                        if (0 <= selectedItem[1].position.top && selectedItem[1].position.top <= 2) {
+                            if (nowItem.position.left >= 3 && nowItem.position.left <= 5 && nowItem.position.top <= 3 && nowItem.position.top >= 0) {
+                                return 1;
+                            } else {
+                                return 0;
+                            }
+                        } else if (7 <= selectedItem[1].position.top && selectedItem[1].position.top <= 9) {
+                            if (nowItem.position.left >= 3 && nowItem.position.left <= 5 && nowItem.position.top <= 9 && nowItem.position.top >= 7) {
+                                return 1;
+                            } else {
+                                return 0;
+                            }
+                        } else {
+                            return 0;
+                        }
+                    } else {
+                        return 0;
+                    }
                 } else {
                     return 0;
                 }
@@ -126,6 +168,49 @@ export default class Zoufa {
                 } else {
                     return 0;
                 }
+            } else {
+                return 0;
+            }
+        }
+
+        function xiangMod() {
+            let flag = 0;
+            if (nowItem.position.top > selectedItem[1].position.top && nowItem.position.left > selectedItem[1].position.left) {
+                for (let i in qi) {
+                    if (qi[i].power !== 2) {
+                        if (selectedItem[1].position.top + 1 === qi[i].position.top && selectedItem[1].position.left + 1 === qi[i].position.left) {
+                            flag++;
+                        }
+                    }
+                }
+            } else if (nowItem.position.top > selectedItem[1].position.top && nowItem.position.left < selectedItem[1].position.left) {
+                for (let i in qi) {
+                    if (qi[i].power !== 2) {
+                        if (selectedItem[1].position.top + 1 === qi[i].position.top && selectedItem[1].position.left - 1 === qi[i].position.left) {
+                            flag++;
+                        }
+                    }
+                }
+            } else if (nowItem.position.top < selectedItem[1].position.top && nowItem.position.left > selectedItem[1].position.left) {
+                for (let i in qi) {
+                    if (qi[i].power !== 2) {
+                        if (selectedItem[1].position.top - 1 === qi[i].position.top && selectedItem[1].position.left + 1 === qi[i].position.left) {
+                            flag++;
+                        }
+                    }
+                }
+            } else if (nowItem.position.top < selectedItem[1].position.top && nowItem.position.left < selectedItem[1].position.left) {
+                for (let i in qi) {
+                    if (qi[i].power !== 2) {
+                        if (selectedItem[1].position.top - 1 === qi[i].position.top && selectedItem[1].position.left - 1 === qi[i].position.left) {
+                            flag++;
+                        }
+                    }
+                }
+            }
+
+            if (flag === 0) {
+                return 1;
             } else {
                 return 0;
             }
