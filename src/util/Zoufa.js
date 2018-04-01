@@ -24,8 +24,10 @@ export default class Zoufa {
             case 3:// 車
                 return mod();
             case 4:// 马，斜着走，横跨“日”位子，中间路障判断
-                if (1) {
-                    return 1;
+                const hDisplacementM = Math.abs(selectedItem[1].position.left - nowItem.position.left);
+                const vDisplacementM = Math.abs(selectedItem[1].position.top - nowItem.position.top);
+                if ((Math.abs(hDisplacementM - vDisplacementM) - 1) === 0 && hDisplacementM > 0 && vDisplacementM > 0) {
+                    return maMod(hDisplacementM, vDisplacementM);
                 } else {
                     return 0;
                 }
@@ -55,8 +57,6 @@ export default class Zoufa {
                 } else {
                     return 0;
                 }
-
-
             case 6:// 仕，只能斜着走，只能走一格
                 const hDisplacementSh = Math.abs(selectedItem[1].position.left - nowItem.position.left);
                 const vDisplacementSh = Math.abs(selectedItem[1].position.top - nowItem.position.top);
@@ -204,6 +204,54 @@ export default class Zoufa {
                     if (qi[i].power !== 2) {
                         if (selectedItem[1].position.top - 1 === qi[i].position.top && selectedItem[1].position.left - 1 === qi[i].position.left) {
                             flag++;
+                        }
+                    }
+                }
+            }
+
+            if (flag === 0) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+
+        function maMod(hDisplacementM, vDisplacementM) {
+            console.log(hDisplacementM, vDisplacementM);
+            let flag = 0;
+            if (hDisplacementM === 2) {
+                if (nowItem.position.left > selectedItem[1].position.left) {
+                    for (let i in qi) {
+                        if (qi[i].power !== 2) {
+                            if (selectedItem[1].position.left + 1 === qi[i].position.left && selectedItem[1].position.top === qi[i].position.top) {
+                                flag++;
+                            }
+                        }
+                    }
+                } else if (nowItem.position.left < selectedItem[1].position.left) {
+                    for (let i in qi) {
+                        if (qi[i].power !== 2) {
+                            if (selectedItem[1].position.left - 1 === qi[i].position.left && selectedItem[1].position.top === qi[i].position.top) {
+                                flag++;
+                            }
+                        }
+                    }
+                }
+            } else if (vDisplacementM === 2) {
+                if (nowItem.position.top > selectedItem[1].position.top) {
+                    for (let i in qi) {
+                        if (qi[i].power !== 2) {
+                            if (selectedItem[1].position.top + 1 === qi[i].position.top && selectedItem[1].position.left === qi[i].position.left) {
+                                flag++;
+                            }
+                        }
+                    }
+                } else if (nowItem.position.top < selectedItem[1].position.top) {
+                    for (let i in qi) {
+                        if (qi[i].power !== 2) {
+                            if (selectedItem[1].position.top - 1 === qi[i].position.top && selectedItem[1].position.left === qi[i].position.left) {
+                                flag++;
+                            }
                         }
                     }
                 }

@@ -17,7 +17,8 @@ class App extends Component {
             qi: [],
             someOneSelected: false,
             whoStep: 2,
-            selectItem: []
+            selectItem: [],
+            record: []
         };
     }
 
@@ -35,6 +36,8 @@ class App extends Component {
                     qi[i].selected = false;
                 }
             }
+
+
             this.stepChange(this.state.whoStep);// 交换棋手
 
         } else {
@@ -57,10 +60,12 @@ class App extends Component {
         }
     };
 
+    // 开始游戏
     startHandle() {
         this.setState({whoStep: 0});
     }
 
+    // 选择棋子，并进行游戏步骤
     selectHandle(item, id) {
         if (this.state.whoStep !== 2) {
             // 判断是否开始了
@@ -96,6 +101,10 @@ class App extends Component {
                 console.log('开始移动');
                 this.changePosition(item);// 调用位置交换方法
 
+                const record = this.state.record;
+                record.push(qi);
+                this.setState({record: record});
+
             } else if (this.state.someOneSelected && item.power !== this.state.whoStep) {
                 // 如果选了棋子,那么再选敌方棋子就会开始能否吃到
                 console.log('开始吃掉别人');
@@ -104,6 +113,8 @@ class App extends Component {
 
                 this.stepChange(this.state.whoStep);// 交换棋手
             }
+
+            // 保存新的棋子状态
             this.setState({qi: qi});
 
         } else {
@@ -114,15 +125,23 @@ class App extends Component {
         }
     }
 
+    // 反悔
+    goBack() {
+        if (this.state.record.length < 2) {
+            alert('还没走就反悔？');
+        } else {
+        }
+    }
+
+    // 初始化
     componentWillMount() {
         for (let i in qi) {
             qi[i].selected = false;
         }
-        this.setState({qi: qi});
+        this.setState({qi: qi, record: [qi]});
     }
 
     render() {
-
         const shangQipan = [];
         for (let i = 0; i < 32; i++) {
             if (i === 3 || i === 12) {
@@ -171,7 +190,7 @@ class App extends Component {
                     <Operator
                         step={this.state.whoStep}
                         start={this.startHandle.bind(this)}
-                    />
+                        goBack={this.goBack.bind(this)}/>
                 </div>
             </div>
         );
