@@ -23,7 +23,7 @@ class Operator extends Component {
             <div className={`${'op'}`}>
                 <div style={{color: 'red'}}>提示信息：{message()}</div>
                 <button onClick={this.props.start}>开始</button>
-                <button onClick={this.props.goBack}>悔棋</button>
+                <button onClick={this.props.goBack}>重新开始</button>
             </div>
         );
     }

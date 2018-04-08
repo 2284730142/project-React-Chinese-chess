@@ -26,7 +26,6 @@ class App extends Component {
     changePosition = (item) => {
         //调用走位判断机制
         if (Zoufa.methodTaolu(this.state.selectItem, item, this.state.qi, 0) === 1) {
-
             // 交换position
             for (let i in qi) {
                 if (qi[i].name === this.state.selectItem[1].name && i + '' === this.state.selectItem[0] + '') {
@@ -36,10 +35,7 @@ class App extends Component {
                     qi[i].selected = false;
                 }
             }
-
-
             this.stepChange(this.state.whoStep);// 交换棋手
-
         } else {
             alert('走位有问题');
         }
@@ -52,7 +48,6 @@ class App extends Component {
             alert('你没有办法吃到对方');
         } else {
             // 交换position,并修改交换位置后棋子的数值（相当于直接删除）
-            console.log(this.state.selectItem, item)
             let deleteItemIndex = 0;
             for (let i in qi) {
                 if (qi[i].name === item.name) {
@@ -65,7 +60,6 @@ class App extends Component {
                     qi[i].selected = false;
                 }
             }
-
             qi[deleteItemIndex] = {
                 "name": "",
                 "position": {
@@ -75,8 +69,6 @@ class App extends Component {
                 "power": 2,
                 "type": 0
             };
-
-
             this.stepChange(this.state.whoStep);// 交换棋手
         }
     };
@@ -96,6 +88,11 @@ class App extends Component {
         }
     };
 
+    // 记录游戏
+    saveRecord = (origin, target, step) => {
+        console.log(origin, target, step)
+    };
+
     // 开始游戏
     startHandle() {
         this.setState({whoStep: 0});
@@ -105,15 +102,11 @@ class App extends Component {
     selectHandle(item, id) {
         if (this.state.whoStep !== 2) {
             // 判断是否开始了
-
             if ((!this.state.someOneSelected && item.power === 2) || (!this.state.someOneSelected && item.power !== this.state.whoStep)) {
                 // 如果没有选择棋子且该棋子是空棋或者选的不是自己的棋子
-
                 alert('选你的棋子啊');
-
             } else if (!this.state.someOneSelected && item.power !== 2) {
                 // 如果没有选择棋子且该棋子不为空棋
-
                 this.setState({
                     someOneSelected: true,
                     selectItem: [id, item]
@@ -121,50 +114,34 @@ class App extends Component {
                 for (let i in qi) {
                     qi[i].name === item.name && i + '' === id + '' ? qi[i].selected = true : qi[i].selected = false;
                 }
-
             } else if (this.state.someOneSelected && item.power === this.state.whoStep) {
                 // 如果选了棋子,那么再选相同阵营的棋子就会更换棋子
-
                 this.setState({
                     selectItem: [id, item]
                 });
                 for (let i in qi) {
                     qi[i].name === item.name && i + '' === id + '' ? qi[i].selected = true : qi[i].selected = false;
                 }
-
             } else if (this.state.someOneSelected && item.power === 2) {
                 // 如果选了棋子,那么再选空棋就会开始走位
                 console.log('开始移动');
                 this.changePosition(item);// 调用位置交换方法
-
-                // const record = this.state.record;
-                // record.push(qi);
-                // this.setState({record: record});
-
             } else if (this.state.someOneSelected && item.power !== this.state.whoStep) {
                 // 如果选了棋子,那么再选敌方棋子就会开始能否吃到
                 console.log('开始吃掉别人');
                 this.chiStep(item);
             }
-
             // 保存新的棋子状态
             this.setState({qi: qi});
-
         } else {
             // 这是没开始
-
             alert('麻烦看提示信息点<开始>按钮');
-
         }
     }
 
-    // 反悔
+    // 重新开始
     goBack() {
-        if (this.state.record.length < 2) {
-            alert('还没走就反悔？');
-        } else {
-
-        }
+        window.location.reload();
     }
 
     // 初始化
@@ -172,7 +149,7 @@ class App extends Component {
         for (let i in qi) {
             qi[i].selected = false;
         }
-        this.setState({qi: qi, record: [qi]});
+        this.setState({qi: qi});
     }
 
     render() {
