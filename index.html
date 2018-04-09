@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>提示：点击开始</div>
+<button id="start">开始</button>
+<button id="select">选定</button>
+<span id="span"></span>
+<script>
+    window.onload = function (e) {
+        var songs = ['臆病的花束', 'nuit', 'happy shape', 'meru', '恋如雨止', 'peace sign', '银色飞行船', 'vivi', '只有你', '只为生命', '高高的塔', '花降', '白雪', '砂之惑星', '狡猾', 'flos'];
+        var songInt = '';
+        var span = document.getElementById('span');
+        console.log(songs.length);
+        document.getElementById('start').onclick = function (e) {
+            songInt = setInterval(function () {
+                var random = Math.floor(Math.random() * songs.length);
+                span.innerText = songs[random];
+            }, 5);
+        };
+
+        document.getElementById('select').onclick = function (e) {
+            clearInterval(songInt);
+        }
+    }
+</script>
+</body>
+</html>
