@@ -1,7 +1,7 @@
 export default class Zoufa {
     // 应该还要把qi的数组传进来，因为炮需要架一个东西才能打，需要判断路径上是否有东西
-    static methodRun(selectedItem, nowItem, qi) {
-        console.log(selectedItem[1].type);
+    static methodTaolu(selectedItem, nowItem, qi, what) {
+
         switch (selectedItem[1].type) {
             case 1:// 黑色卒子，在下半边，只能往上走 即top-1，left不动,上半边只能往上或左右，不可以往后
                 if (selectedItem[1].position.top > 4) {
@@ -20,9 +20,13 @@ export default class Zoufa {
                     }
                 }
             case 2:// 炮
-                return mod();
+                if (what === 0) { // 走位
+                    return paoModZou();
+                } else { // 吃
+                    return paoModChi();
+                }
             case 3:// 車
-                return mod();
+                return cheMod();
             case 4:// 马，斜着走，横跨“日”位子，中间路障判断
                 const hDisplacementM = Math.abs(selectedItem[1].position.left - nowItem.position.left);
                 const vDisplacementM = Math.abs(selectedItem[1].position.top - nowItem.position.top);
@@ -135,7 +139,83 @@ export default class Zoufa {
                 return 0;
         }
 
-        function mod() {
+        function paoModZou() {
+            // 判断是否是水平或者垂直的位移,有且至少有一个是0,再判断中间是否有障碍物
+            const hDisplacement = Math.abs(selectedItem[1].position.left - nowItem.position.left);
+            const vDisplacement = Math.abs(selectedItem[1].position.top - nowItem.position.top);
+            console.log(hDisplacement, vDisplacement);
+            if ((hDisplacement === 0 && vDisplacement !== 0) || (hDisplacement !== 0 && vDisplacement === 0)) {
+                let flag = 0;
+                if (vDisplacement !== 0) {// 垂直情况,路障水平（left）相同
+                    for (let i in qi) {
+                        if (qi[i].power !== 2) {
+                            if (qi[i].position.left === nowItem.position.left) {
+                                if ((qi[i].position.top > nowItem.position.top && qi[i].position.top < selectedItem[1].position.top) || (qi[i].position.top < nowItem.position.top && qi[i].position.top > selectedItem[1].position.top)) {
+                                    flag++;
+                                }
+                            }
+                        }
+                    }
+                } else if (hDisplacement !== 0) {// 水平情况,路障垂直（top）相同
+                    for (let i in qi) {
+                        if (qi[i].power !== 2) {
+                            if (qi[i].position.top === nowItem.position.top) {
+                                if ((qi[i].position.left > nowItem.position.left && qi[i].position.left < selectedItem[1].position.left) || (qi[i].position.left < nowItem.position.left && qi[i].position.left > selectedItem[1].position.left)) {
+                                    flag++;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (flag === 0) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            } else {
+                return 0;
+            }
+        }
+
+        function paoModChi() {
+            // 判断是否是水平或者垂直的位移,有且至少有一个是0,再判断中间是否有障碍物
+            const hDisplacement = Math.abs(selectedItem[1].position.left - nowItem.position.left);
+            const vDisplacement = Math.abs(selectedItem[1].position.top - nowItem.position.top);
+            console.log(hDisplacement, vDisplacement);
+            if ((hDisplacement === 0 && vDisplacement !== 0) || (hDisplacement !== 0 && vDisplacement === 0)) {
+                let flag = 0;
+                if (vDisplacement !== 0) {// 垂直情况,路障水平（left）相同
+                    for (let i in qi) {
+                        if (qi[i].power !== 2) {
+                            if (qi[i].position.left === nowItem.position.left) {
+                                if ((qi[i].position.top > nowItem.position.top && qi[i].position.top < selectedItem[1].position.top) || (qi[i].position.top < nowItem.position.top && qi[i].position.top > selectedItem[1].position.top)) {
+                                    flag++;
+                                }
+                            }
+                        }
+                    }
+                } else if (hDisplacement !== 0) {// 水平情况,路障垂直（top）相同
+                    for (let i in qi) {
+                        if (qi[i].power !== 2) {
+                            if (qi[i].position.top === nowItem.position.top) {
+                                if ((qi[i].position.left > nowItem.position.left && qi[i].position.left < selectedItem[1].position.left) || (qi[i].position.left < nowItem.position.left && qi[i].position.left > selectedItem[1].position.left)) {
+                                    flag++;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (flag === 1) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            } else {
+                return 0;
+            }
+        }
+
+        function cheMod() {
             // 判断是否是水平或者垂直的位移,有且至少有一个是0,再判断中间是否有障碍物
             const hDisplacement = Math.abs(selectedItem[1].position.left - nowItem.position.left);
             const vDisplacement = Math.abs(selectedItem[1].position.top - nowItem.position.top);
@@ -263,10 +343,6 @@ export default class Zoufa {
                 return 0;
             }
         }
-    }
-
-    static methodChi(item) {
-
     }
 }
 
